@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: model-example-bbbb-deployment
+  namespace: mlserve-model-example-bbbb
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: model-example-bbbb
+  template:
+    metadata:
+      labels:
+        app: model-example-bbbb
+    spec:
+      containers:
+      - name: model-example-bbbb
+        image: jleighsutherland/model_example_bbbb:v1
+        ports:
+        - containerPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: model-example-bbbb-service
+  namespace: mlserve-model-example-bbbb
+spec:
+  selector:
+    app: model-example-bbbb
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: NodePort  # Expose the service to the outside world via a NodePort
